@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import Heading from './Heading'
 
 function App() {
   const a = "Counter App"
@@ -19,6 +20,7 @@ function App() {
   return (
     <div>
       <h1>{a}</h1>
+      <Heading/>
       <h2>Current Value = {count}</h2>
       <button onClick={incr}>Increment</button>
       <button onClick={decr}>Decrement</button>
