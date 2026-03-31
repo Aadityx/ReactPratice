@@ -3,10 +3,16 @@
   font-family: 'Times New Roman', Times, serif;
   color: white;
 }
+.App{
+  text-align: center;
+  margin-top: 50px;
+}
+
 .heading{
   text-align: center;
   font-size: 50px;
   margin-top: 20px;
+
 }
 .btn{
   padding: 10px 20px;

@@ -18,7 +18,7 @@ function App() {
     setCount(0);
   }
   return (
-    <div>
+    <div className="App">
       <h1 className='heading'>{a}</h1>
       <Heading count={count}/> {/*value passing*/ }
       <button className='btn' onClick={incr}>Increment</button>
