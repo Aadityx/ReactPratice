@@ -20,8 +20,7 @@ function App() {
   return (
     <div>
       <h1>{a}</h1>
-      <Heading/>
-      <h2>Current Value = {count}</h2>
+      <Heading count={count}/> {/*value passing*/ }
       <button onClick={incr}>Increment</button>
       <button onClick={decr}>Decrement</button>
       <button onClick={reset}>Reset</button>
