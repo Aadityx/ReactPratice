@@ -1,17 +1,28 @@
-function ToDoForm() {
-    return (
-        <Container >
-            <Form>
-                <FormGroup className="form">
-                    <Label for="task">Task</Label>
-                    <Input type="text" name="task" id="task" placeholder="Enter a task" />
-                </FormGroup>
-                <FormGroup className="AddButton">
-                    <Button color="primary">Add Task</Button>
-                </FormGroup>
-            </Form>
-        </Container>
-    )
+import { Container, Form, Button } from 'react-bootstrap';
+
+function ToDoForm({ onAddTodo }) {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const input = form.elements[0];
+        const text = input.value.trim();
+        if (text) {
+            onAddTodo(text);
+            input.value = '';
+        }
+    };
+      return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Control type="text" placeholder="Enter task" />
+      </Form.Group>
+
+      <Button variant="primary" type="submit">
+        Add Task
+      </Button>
+    </Form>
+  );
+
 }
 
 export default ToDoForm
