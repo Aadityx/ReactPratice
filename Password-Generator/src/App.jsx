@@ -24,6 +24,9 @@ function App() {
     setPassword(generatedPassword)
   }, [includeNumerics, includesymbols, length])
 
+  const copyPassword = () => {
+    navigator.clipboard.writeText(password);
+  }
 
   useEffect(() => {
     generatePassword()
@@ -68,6 +71,7 @@ function App() {
       <div>
         <h2>Generated Password:</h2>
         <p>{password}</p>
+        <button onClick={() => copyPassword()}>Copy to Clipboard</button>
       </div>
     </div>
   )
