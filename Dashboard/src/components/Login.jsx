@@ -1,29 +1,23 @@
-function Login(){
-    const [email, setEmail] = useState("");
-    return(
-            <Form>
-      <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-        <Form.Label column sm="2">
-          Email
-        </Form.Label>
-        <Col sm="10">
-          <Form.Control plaintext readOnly defaultValue="email@example.com" />
-        </Col>
-      </Form.Group>
-
-      <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-        <Form.Label column sm="2">
-          Password
-        </Form.Label>
-        <Col sm="10">
-          <Form.Control type="password" placeholder="Password" />
-        </Col>
-      </Form.Group>
+import { Form, Row, Col, Button, FormGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+function Login() {
+  return (
+    <div className="login-container">
+    <Form>
+      <FormGroup className="Email">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" />
+      </FormGroup>
+      <FormGroup className="Password">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" placeholder="Enter password" />
+      </FormGroup>
 
       <Button variant="primary" type="submit">
-        <Link to="/dashboard/${email}">Login</Link>
+        <Link to="/dashboard">Login</Link>
       </Button>
     </Form>
-
-    )
+</div>
+  )
 }
+export default Login

@@ -1,7 +1,7 @@
 function Dashboard(){
     return(
         <div>
-            <h1> Welcome {email} to Dashboard Page</h1>
+            <h1> Welcome to Dashboard Page</h1>
         </div>
     )
 }
