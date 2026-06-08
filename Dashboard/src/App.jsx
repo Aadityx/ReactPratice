@@ -27,7 +27,7 @@ function App() {
         <Route path ="/contact" element={<Contact />} />
         <Route path ="/login" element={<Login />} />
         <Route path ="/signup" element={<SignUp />} />
-        <Route path ="/dashboard" element={<Dashboard />} />
+        <Route path ="/dashboard/:email" element={<Dashboard />} />
       </Routes>
       </BrowserRouter>
     </div>

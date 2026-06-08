@@ -1,8 +1,14 @@
-function Dashboard(){
-    return(
-        <div>
-            <h1> Welcome to Dashboard Page</h1>
-        </div>
-    )
+import { useParams } from 'react-router-dom';
+
+function Dashboard() {
+  const { email } = useParams();
+
+  return (
+    <div>
+      <h1>Welcome</h1>
+      <p>{email}</p>
+    </div>
+  );
 }
-export default Dashboard
+
+export default Dashboard;
