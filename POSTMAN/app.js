@@ -108,6 +108,34 @@ app.post('/student', authMiddleware, async (req, res) => {
     }
 });
 
+app.put('/student/:name', authMiddleware, async (req, res) => {
+    const { name } = req.params;
+    const body = req.body;
+    try {
+        const updatedStudent = await Student.findOneAndUpdate(
+            {name: name},
+            body,
+            { new: true }
+        );
+        if (!updatedStudent) {
+            return res.status(404).json({
+                status: "Not Found",
+                message: "Student not found"
+            });
+        }
+        res.json({
+            status: "Success",
+            student: updatedStudent
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            status: "Error",
+            message: "Failed to update student"
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
