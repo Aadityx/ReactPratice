@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./db');
 const User = require('./models/users');
+const Student = require('./models/student');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'your_secret_key';
@@ -72,6 +73,15 @@ app.post('/login', async (req, res) => {
             }
         );
     }
+});
+
+
+app.get('/student', async (req, res) => {
+    const students = await Student.find();
+    res.json({
+        status: "Success",
+        students: students
+    });
 });
 
 app.listen(PORT, () => {
