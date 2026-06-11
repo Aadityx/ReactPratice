@@ -5,6 +5,7 @@ const Student = require('./models/student');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'your_secret_key';
+const authMiddleware = require('./auth');
 
 const app = express();
 connectDB();
@@ -76,31 +77,7 @@ app.post('/login', async (req, res) => {
 });
 
 
-app.get('/student', async (req, res) => {
-    const token = req.headers['authorization'];
-    console.log("Received token:", token);
-    if (!token) {
-        return res.status(401).json(
-            {
-                status: 'Unauthorized',
-                message: 'Access denied'
-            }
-        );
-    }
-    let jwtToken = token.replace('Bearer ', '');
-    try {
-        jwt.verify(jwtToken, SECRET_KEY);
-        let user = jwt.decode(jwtToken);
-        console.log("Authenticated user:", user);
-    } catch (err) {
-        console.log("Token verification failed:", err);
-        return res.status(401).json(
-            {
-                status: 'Unauthorized',
-                message: 'Invalid token'
-            }
-        );
-    }
+app.get('/student', authMiddleware, async (req, res) => {
     const students = await Student.find();
     res.json({
         status: "Success",
