@@ -85,6 +85,29 @@ app.get('/student', authMiddleware, async (req, res) => {
     });
 });
 
+app.post('/student', authMiddleware, async (req, res) => {
+    const { name, age, grade } = req.body;
+    try{
+        const newStudent = new Student({ name, age, grade });
+        await newStudent.save();
+        res.status(201).json(
+            {
+                status: 'Created',
+                message: 'Student created successfully',
+                student: newStudent
+            }
+        );
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(
+            {
+                status: 'Error',
+                message: 'Failed to create student'
+            }
+        );
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
