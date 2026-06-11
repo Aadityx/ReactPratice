@@ -87,7 +87,7 @@ app.get('/student', authMiddleware, async (req, res) => {
 
 app.post('/student', authMiddleware, async (req, res) => {
     const { name, age, grade } = req.body;
-    try{
+    try {
         const newStudent = new Student({ name, age, grade });
         await newStudent.save();
         res.status(201).json(
@@ -113,7 +113,7 @@ app.put('/student/:name', authMiddleware, async (req, res) => {
     const body = req.body;
     try {
         const updatedStudent = await Student.findOneAndUpdate(
-            {name: name},
+            { name: name },
             body,
             { new: true }
         );
@@ -132,6 +132,32 @@ app.put('/student/:name', authMiddleware, async (req, res) => {
         res.status(500).json({
             status: "Error",
             message: "Failed to update student"
+        });
+    }
+});
+
+app.delete('/student/:name', authMiddleware, async (req, res) => {
+    const { name } = req.params;
+    try {
+        const deletedStudent = await Student.findOneAndDelete({
+            name:
+                name
+        });
+        if (!deletedStudent) {
+            return res.status(404).json({
+                status: "Not Found",
+                message: "Student not found"
+            });
+        }
+        res.json({
+            status: "Success",
+            message: "Student deleted successfully"
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            status: "Error",
+            message: "Failed to delete student"
         });
     }
 });
