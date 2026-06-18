@@ -15,11 +15,6 @@ const userSchema = new mongoose.Schema(
             type : String,
             required : true
         },
-        userID : {
-            type : Int,
-            unique : true,
-            required : true
-        },
         userType : {
             type : String,
             enum : ['seller', 'customer'],
@@ -29,4 +24,5 @@ const userSchema = new mongoose.Schema(
     {timestamps : true}
 );
 
-module.exports = userSchema
+const User = mongoose.model('User', userSchema);
+module.exports = User;

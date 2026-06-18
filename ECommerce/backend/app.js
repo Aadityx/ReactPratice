@@ -1,9 +1,10 @@
 const connectDB = require("./db");
 const express = require('express');
-
+const authRoutes = require('./auth');
 
 const app = express();
 app.use(express.json())
+app.use('/auth', authRoutes);
 connectDB();
 
 const PORT = 3000;
