@@ -161,7 +161,32 @@ app.put('/details/:name', authMiddlewear, async (req,res) =>{
     }
 })
 
-
+app.delete('/details/:name', authMiddlewear, async(req,res) => {
+    const {name} = req.params;
+    try{
+        const deleteStudent = await student.findOneAndDelete({name : name});
+        if(!deleteStudent){
+            return res.status(404).json(
+                {
+                    status : "Not Found",
+                    message : "Student not found"
+                }
+            )
+        }
+        res.status(201).json(
+            {
+                status : "Success",
+                message : "Deleted Student"
+            }
+        )
+    }
+    catch(error){
+        return res.json({
+            status : "Failed",
+            message : "Cannot Delete student"
+        })
+    }
+})
 app.listen(PORT, () => {
     console.log(`Server is running at ${PORT}`);
 })
