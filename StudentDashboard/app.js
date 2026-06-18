@@ -101,6 +101,32 @@ app.get('/details', authMiddlewear ,async (req, res) => {
     });
 });
 
+app.post('/details', authMiddlewear, async(req,res) =>{
+    const {name,email,password} = req.body;
+    try{
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newStudent = new student({name, email, password : hashedPassword});
+        await newStudent.save();
+        res.status(201).json(
+            {
+                status : "Success",
+                message : "New Student added"
+            }
+        )
+    }
+    catch(error)
+    {
+        console.log("Failed:",error);
+        
+        return res.status(401).json(
+            {
+                status : "Error",
+                message : "Failed to add new student"
+            }
+        )
+    }
+})
+
 
 app.listen(PORT, () => {
     console.log(`Server is running at ${PORT}`);
