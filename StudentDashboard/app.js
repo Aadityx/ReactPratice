@@ -3,7 +3,8 @@ const connectDB = require('./db');
 const student = require("./models/student");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-
+const authMiddlewear = require("./authMiddlewear");
+ 
 const app = express();
 connectDB();
 app.use(express.json());
@@ -91,15 +92,15 @@ app.post('/login', async(req,res) => {
 })
 
 
-app.get('/details', async (req,res ) => {
-    const Details = await student.find();
-    res.json(
-        {
-            status : "Data fetched",
-            Details 
-        }
-    )
-})
+app.get('/details', authMiddlewear ,async (req, res) => {
+    const StudentDetails = await student.find().select('-password');
+
+    res.json({
+        status: 'Success',
+        StudentDetails
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running at ${PORT}`);
