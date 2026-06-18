@@ -5,94 +5,94 @@ const User = require('./models/user');
 const router = express.Router();
 const SECRET_KEY = "my_secret_key";
 //New User
-router.post('/register', async (req,res) => {
-    const {name,email,password,userType} = req.body;
-    try{
-        const existingUser = await User.findOne({email});
-        if(existingUser){
+router.post('/register', async (req, res) => {
+    const { name, email, password, userType } = req.body;
+    try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(401).json(
                 {
-                    status : "Duplicate",
-                    message : "User already exists"
+                    status: "Duplicate",
+                    message: "User already exists"
                 }
             )
         }
-        const hashedPassword = await bcrypt.hash(password,10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User(
             {
                 name,
                 email,
-                password:hashedPassword,
+                password: hashedPassword,
                 userType
             }
         )
         const user = await newUser.save();
         res.status(201).json(
             {
-                Status : "Success",
-                message : "User created",
-                user : user
+                Status: "Success",
+                message: "User created",
+                user: user
             }
         )
     }
-    catch(error){
+    catch (error) {
         console.log("Error: ", error);
         return res.status(401).json(
             {
-                status : "Error",
-                message : "Failed to add new user"
+                status: "Error",
+                message: "Failed to add new user"
             }
         )
     }
 })
 
 //login point
-router.post('/login', async (req,res) => {
-    const {email, password} = req.body;
-    try{
-        const user = await User.findOne({email});
-        if(!user){
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(400).json(
                 {
-                    status : "Failed",
-                    message : "Invalid Email"
+                    status: "Failed",
+                    message: "Invalid Email"
                 }
             )
         }
         const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-             return res.status(400).json(
+        if (!isMatch) {
+            return res.status(400).json(
                 {
-                    status : "Failed",
-                    message : "Invalid Password"
+                    status: "Failed",
+                    message: "Invalid Password"
                 }
             )
         }
         const token = jwt.sign(
             {
-                userID : 'user._id',
-                userType : 'User.userType',
-                name : 'User.name',
-                email : 'User.email'
+                userID: user._id,
+                userType: user.userType,
+                name: user.name,
+                email: user.email
             },
             SECRET_KEY,
-            {expiresIn:'1h'}
-        )
+            { expiresIn: '1h' }
+        );
         res.status(200).json(
             {
-                status : "Success",
-                message : "User Logged In",
-                token : token
+                status: "Success",
+                message: "User Logged In",
+                token: token
             }
         )
     }
-    catch(error){
+    catch (error) {
         console.log("error :", error);
-        
+
         return res.status(400).json(
             {
-                status : "Failed",
-                message : "Login Failed"
+                status: "Failed",
+                message: "Login Failed"
             }
         )
     }

@@ -1,10 +1,12 @@
 const connectDB = require("./db");
 const express = require('express');
 const authRoutes = require('./auth');
+const productRoutes = require('./product')
 
 const app = express();
 app.use(express.json())
 app.use('/auth', authRoutes);
+app.use('/products', productRoutes);
 connectDB();
 
 const PORT = 3000;
