@@ -127,6 +127,40 @@ app.post('/details', authMiddlewear, async(req,res) =>{
     }
 })
 
+app.put('/details/:name', authMiddlewear, async (req,res) =>{
+    const {name} = req.params;
+    const body = req.body;
+    try{
+        const updateStudent = await student.findOneAndUpdate(
+            {name : name}, 
+            body,
+            {new : true}
+        )
+    if(!updateStudent){
+        return res.status(404).json(
+            {
+                status : "Not found",
+                message : "Student not found"
+            }
+        )
+    }
+    res.json(
+        {
+            status : "Success",
+            message : "Student data updated"
+        }
+    )
+    }
+    catch(error){
+        return res.status(401).json(
+            {
+                status : "Error",
+                message : "Failed to update student data"
+            }
+        )
+    }
+})
+
 
 app.listen(PORT, () => {
     console.log(`Server is running at ${PORT}`);
