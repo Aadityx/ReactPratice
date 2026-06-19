@@ -54,4 +54,44 @@ router.get('/list', async(req,res) => {
         
     }
 })
+
+router.put('/update/:id', authMiddleWear, async(req,res) => {
+    console.log("User Info : ", user);
+    const {productName, description, price, inventoryCount, productImage } = req.body;
+    try{
+        const product = await Product.findById(req.params.id);
+        if (!product){
+            res.status(404),json(
+                {
+                    status : "Not Found",
+                    message : "product not found"
+                }
+            )
+        }
+        //check if user is the seller of the product
+        if (product.sellerID.toString() !== req.user.userID){
+            res.status(404),json(
+                {
+                    status : "Unauthorized",
+                    message : "Cannot update product details"
+                }
+            ) 
+        }
+        product.productName = productName || product.productName;
+        product.description = description || product.description;
+        product.price = price || product.price;
+        product.inventoryCount = inventoryCount || product.inventoryCount;
+        product.productImage = productImage || product.productImage;
+
+        const updatedProduct = await product.save();
+       res.status(201),json(
+                {
+                    status : "Success",
+                    message : "Updated product details",
+                    product : updatedProduct
+                }
+            ) 
+    }
+    
+})
 module.exports = router;
