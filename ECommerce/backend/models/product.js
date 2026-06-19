@@ -3,7 +3,7 @@ const User = require('./user');
 
 const productSchema = new mongoose.Schema(
     {
-        name : {
+        productName : {
             type : String,
             required : true
         },
@@ -13,25 +13,24 @@ const productSchema = new mongoose.Schema(
         },
         price : {
             type : Number,
-            required = true
+            required : true
         },
-        seller : {
+        sellerID : {
             type : mongoose.Schema.Types.ObjectId,
-            reference : 'User',
-            required = true
+            ref : 'User',
+            required : true
         },
         inventoryCount : {
             type : Number,
-            required = true
+            required : true
         },
         itemSold : {
             type : Number,
-            default : 0,
-            required = true
+            default : 0
         },
-        productImg : {
-            typwe : String,
-            required = true
+        productImage : {
+            type : String,
+            required : true
         },
         isActive : {
             type : Boolean,
@@ -42,3 +41,4 @@ const productSchema = new mongoose.Schema(
 );
 
 const Product = mongoose.model('Product', productSchema);
+module.exports = Product;
