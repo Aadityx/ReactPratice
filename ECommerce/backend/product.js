@@ -2,6 +2,7 @@ const express = require('express');
 const authMiddleWear = require('./authMiddleWear');
 const router = express.Router();
 const Product = require('./models/product');
+const User = require('./models/user');
 
 //Add products
 router.post('/add', authMiddleWear, async(req,res) => {
@@ -10,6 +11,23 @@ router.post('/add', authMiddleWear, async(req,res) => {
     try{
         const {productName, description, price, inventoryCount, productImage } = req.body;
         const seller = req.user.userID;
+        const user = await User.findById(seller);
+        if(!user){
+             res.status(401).json(
+            {
+                status : "Error",
+                message : "User not found"
+            }
+        )
+        }
+        if (user.userType !== 'seller'){
+             res.status(401).json(
+            {
+                status : "Error",
+                message : "Only Seller can add New Product "
+            }
+        )
+        }
         const product = new Product({productName, description, price, sellerID : seller, inventoryCount, productImage});
         const newProduct = await product.save();
         res.status(201).json(
@@ -63,7 +81,7 @@ router.put('/update/:id', authMiddleWear, async(req,res) => {
     try{
         const product = await Product.findById(req.params.id);
         if (!product){
-            res.status(404).json(
+            return res.status(404).json(
                 {
                     status : "Not Found",
                     message : "product not found"
@@ -72,7 +90,7 @@ router.put('/update/:id', authMiddleWear, async(req,res) => {
         }
         //check if user is the seller of the product
         if (product.sellerID.toString() !== req.user.userID){
-            res.status(404).json(
+            return res.status(404).json(
                 {
                     status : "Unauthorized",
                     message : "Cannot update product details"
@@ -97,7 +115,7 @@ router.put('/update/:id', authMiddleWear, async(req,res) => {
     catch(error){
         console.log("Error:", error);
         
-         res.status(201).json(
+         res.status(401).json(
             {
                 status : "Error",
                 message : "Failed to add Update Product "
