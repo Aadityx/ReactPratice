@@ -3,7 +3,7 @@ const authMiddleWear = require('./authMiddleWear');
 const router = express.Router();
 const Product = require('./models/product');
 
-
+//Add products
 router.post('/add', authMiddleWear, async(req,res) => {
     //Add products
     console.log("User Info : ", req.user);
@@ -32,6 +32,7 @@ router.post('/add', authMiddleWear, async(req,res) => {
     }
 })
 
+//List Products
 router.get('/list', async(req,res) => {
     try{
         const products = await Product.find();
@@ -55,13 +56,14 @@ router.get('/list', async(req,res) => {
     }
 })
 
+//Update Products
 router.put('/update/:id', authMiddleWear, async(req,res) => {
-    console.log("User Info : ", user);
+    console.log("User Info : ", req.user);
     const {productName, description, price, inventoryCount, productImage } = req.body;
     try{
         const product = await Product.findById(req.params.id);
         if (!product){
-            res.status(404),json(
+            res.status(404).json(
                 {
                     status : "Not Found",
                     message : "product not found"
@@ -70,7 +72,7 @@ router.put('/update/:id', authMiddleWear, async(req,res) => {
         }
         //check if user is the seller of the product
         if (product.sellerID.toString() !== req.user.userID){
-            res.status(404),json(
+            res.status(404).json(
                 {
                     status : "Unauthorized",
                     message : "Cannot update product details"
@@ -84,7 +86,7 @@ router.put('/update/:id', authMiddleWear, async(req,res) => {
         product.productImage = productImage || product.productImage;
 
         const updatedProduct = await product.save();
-       res.status(201),json(
+       res.status(201).json(
                 {
                     status : "Success",
                     message : "Updated product details",
@@ -92,6 +94,59 @@ router.put('/update/:id', authMiddleWear, async(req,res) => {
                 }
             ) 
     }
+    catch(error){
+        console.log("Error:", error);
+        
+         res.status(201).json(
+            {
+                status : "Error",
+                message : "Failed to add Update Product "
+            }
+        )
+    }
     
 })
+
+//Delete Products
+router.delete('/delete/:id', authMiddleWear, async(req,res) => {
+    try{
+        const product = await Product.findById(req.params.id);
+        if (!product){
+            res.status(404).json(
+                {
+                    status : "Not found",
+                    message : "Product ID not found"
+                }
+            )
+        }
+
+        if(product.sellerID.toString() !== req.user.userID){
+            res.status(401).json(
+                {
+                    status : "Unauthorized",
+                    message : "No access to delete"
+                }
+            )
+        }
+
+        await product.deleteOne();
+        res.status(201).json(
+                {
+                    status : "Success",
+                    message : "Product Deleted"
+                }
+            )
+    }
+     catch(error){
+        console.log("Error:", error);
+        
+         res.status(201).json(
+            {
+                status : "Error",
+                message : "Failed to add New Product "
+            }
+        )
+    }
+})
+
 module.exports = router;
