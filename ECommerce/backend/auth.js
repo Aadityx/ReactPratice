@@ -10,12 +10,12 @@ router.post('/register', async (req, res) => {
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(401).json(
-                {
-                    status: "Duplicate",
-                    message: "User already exists"
-                }
-            )
+            console.log("User already exists:", email);
+
+            return res.status(401).json({
+                status: "Duplicate",
+                message: "User already exists"
+            });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User(
@@ -36,14 +36,13 @@ router.post('/register', async (req, res) => {
         )
     }
     catch (error) {
-        console.log("Error: ", error);
-        return res.status(401).json(
-            {
-                status: "Error",
-                message: "Failed to add new user"
-            }
-        )
-    }
+    console.log("Registration Error:", error);
+
+    return res.status(500).json({
+        status: "Error",
+        message: error.message
+    });
+}
 })
 
 //login point
