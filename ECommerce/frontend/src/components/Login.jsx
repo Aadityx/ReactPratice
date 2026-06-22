@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
@@ -9,7 +10,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState('');
     const [error, setError] = useState('');
-
+    const navigate = useNavigate();
 
     const login = async() => {
         try{
@@ -23,6 +24,8 @@ function Login() {
             
             if(response.ok) {
                 setIsLoggedIn(true);
+                localStorage.setItem('token', data.token);
+                navigate('/products');
                 setError('');
             } else{
                 setError(data.message || 'Login Failed');
