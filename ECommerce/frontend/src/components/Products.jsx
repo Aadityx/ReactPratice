@@ -14,7 +14,7 @@ function Products() {
     const [show, setShow] = useState(false);
     const [selectedProductID, setSelectedProductID] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [showAlert ,setShowAlert] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     const [variant, setVariant] = useState('success');
     const [alertMessage, setAlertMessage] = useState('')
 
@@ -69,17 +69,17 @@ function Products() {
                 })
             });
             if (response.ok) {
-               setShowAlert(true);
-               setVariant('success');
-               setAlertMessage("Product Purchased Successfully");
-               setTimeout(() => setShowAlert(false),3000);
+                setShowAlert(true);
+                setVariant('success');
+                setAlertMessage("Product Purchased Successfully");
+                setTimeout(() => setShowAlert(false), 3000);
                 handleClose();
             }
             else {
                 setShowAlert(false);
                 setVariant(danger);
                 setAlertMessage("Product Purchase Failed");
-                setTimeout(() => setShowAlert(false),3000);
+                setTimeout(() => setShowAlert(false), 3000);
             }
         }
         catch (error) {
@@ -92,7 +92,10 @@ function Products() {
         <>
             <Container>
                 <h1>Products Page</h1>
-                <Alert  show={showAlert} key={variant} variant={variant}>
+                <Button variant="primary" onClick={() => window.location.href = '/order'}>Go to Orders</Button>
+                <Button variant="primary" onClick={() => {localStorage.clear(); window.location.href = '/'; }}>Logout</Button>
+
+                <Alert show={showAlert} key={variant} variant={variant}>
                     {alertMessage}
                 </Alert>
                 <Row>
