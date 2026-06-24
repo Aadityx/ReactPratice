@@ -6,7 +6,7 @@ const User = require('./models/user');
 
 //Add products
 router.post('/add', authMiddleWear, async(req,res) => {
-    //Add products
+
     console.log("User Info : ", req.user);
     try{
         const {productName, description, price, inventoryCount, productImage } = req.body;
